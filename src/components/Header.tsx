@@ -80,6 +80,16 @@ const Header: React.FC = () => {
                 </li>
                 <li className="nav-item">
                   <Link 
+                    to="/templates" 
+                    className={`nav-link ${location.pathname === '/templates' ? 'active' : ''}`}
+                    onClick={() => setIsNavCollapsed(true)}
+                  >
+                    <i className="fas fa-palette me-1"></i>
+                    Templates
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link 
                     to="/profile" 
                     className={`nav-link ${location.pathname === '/profile' ? 'active' : ''}`}
                     onClick={() => setIsNavCollapsed(true)}

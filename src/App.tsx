@@ -6,6 +6,7 @@ import Header from './components/Header';
 import UserProfile from './components/UserProfile';
 import MyShows from './components/MyShows';
 import PublicShows from './components/PublicShows';
+import TemplateManager from './components/TemplateManager';
 import AuthPage from './components/auth/AuthPage';
 import { Card, Button } from './components/bootstrap';
 import './App.css';
@@ -63,16 +64,14 @@ const HomePage: React.FC = () => {
                           Create custom flyer templates with your own backgrounds
                         </p>
                         <div className="d-grid gap-2">
-                          <Button variant="success" disabled>
+                          <Link to="/templates" className="btn btn-success">
                             <i className="fas fa-palette me-2"></i>
                             Create Template
-                            <small className="d-block mt-1 text-muted">Coming Soon</small>
-                          </Button>
-                          <Button variant="outline-success" disabled>
+                          </Link>
+                          <Link to="/templates" className="btn btn-outline-success">
                             <i className="fas fa-edit me-2"></i>
                             Manage Templates
-                            <small className="d-block mt-1 text-muted">Coming Soon</small>
-                          </Button>
+                          </Link>
                         </div>
                       </div>
                     </Card>
@@ -127,6 +126,16 @@ const App: React.FC = () => {
                 <Header />
                 <div className="container-fluid py-4">
                   <MyShows />
+                </div>
+              </div>
+            </ProtectedRoute>
+          } />
+          <Route path="/templates" element={
+            <ProtectedRoute>
+              <div className="min-vh-100" style={{ backgroundColor: '#f8f9fa' }}>
+                <Header />
+                <div className="container-fluid py-4">
+                  <TemplateManager />
                 </div>
               </div>
             </ProtectedRoute>
