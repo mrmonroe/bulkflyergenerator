@@ -1,0 +1,171 @@
+.header {
+  background: #231F20;
+  color: #caa12b;
+  padding: 15px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.header-logo {
+  height: 40px;
+  width: auto;
+}
+
+.header-title {
+  font-family: 'Oswald', Impact, 'Arial Narrow', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin: 0;
+  color: #caa12b;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  color: #f2f2f2;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-family: 'Oswald', Impact, 'Arial Narrow', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:hover {
+  background: rgba(202, 161, 43, 0.1);
+  color: #caa12b;
+}
+
+.nav-link.active {
+  background: #caa12b;
+  color: #231F20;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  color: #f2f2f2;
+  font-weight: 500;
+}
+
+.logout-button {
+  background: #caa12b;
+  color: #231F20;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  font-family: 'Oswald', Impact, 'Arial Narrow', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.logout-button:hover {
+  background: #b8912a;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 15px;
+  }
+  
+  .header-title {
+    font-size: 1.4rem;
+  }
+  
+  .header-right {
+    gap: 15px;
+  }
+  
+  .header-nav {
+    gap: 10px;
+  }
+  
+  .nav-link {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  
+  .user-name {
+    font-size: 0.8rem;
+  }
+  
+  .logout-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-left {
+    gap: 10px;
+  }
+  
+  .header-logo {
+    height: 30px;
+  }
+  
+  .header-title {
+    font-size: 1.2rem;
+  }
+  
+  .header-right {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  
+  .header-nav {
+    order: -1;
+  }
+  
+  .nav-link {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+}

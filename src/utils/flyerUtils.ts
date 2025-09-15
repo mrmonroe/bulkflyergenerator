@@ -70,3 +70,4 @@ export const getMonthFromDate = (dateString: string): string | null => {
   
   return null;
 };
+

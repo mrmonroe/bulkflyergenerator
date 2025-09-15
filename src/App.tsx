@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/Header';
+import UserProfile from './components/UserProfile';
 import { Show, FlyerData, ExportOptions } from './types';
-import { loadShowsFromCSV, convertShowToFlyerData } from './utils/flyerUtils';
+import { convertShowToFlyerData } from './utils/flyerUtils';
+import { loadShowsFromCSV } from './utils/csvParser';
 import { FlyerGenerator } from './services/flyerGenerator';
 import FlyerPreview from './components/FlyerPreview';
 import ExportButton from './components/ExportButton';
 import './App.css';
 
-const App: React.FC = () => {
+const MainApp: React.FC = () => {
   const [shows, setShows] = useState<Show[]>([]);
   const [flyerElements, setFlyerElements] = useState<FlyerData[]>([]);
   const [loading, setLoading] = useState(false);
@@ -82,8 +88,9 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
+      <Header />
       <div className="container">
-        <div className="header">
+        <div className="main-header">
           <h1>Show Flyer Generator</h1>
           <p>Generate professional flyers for all your shows using your custom template</p>
         </div>
@@ -150,6 +157,35 @@ const App: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<div>Login Page (to be implemented)</div>} />
+          <Route path="/register" element={<div>Register Page (to be implemented)</div>} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <MainApp />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <div className="app">
+                <Header />
+                <div className="container">
+                  <UserProfile />
+                </div>
+              </div>
+            </ProtectedRoute>
+          } />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
 

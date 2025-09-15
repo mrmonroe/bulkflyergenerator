@@ -87,8 +87,7 @@ export class FlyerGenerator {
         logging: false,
         removeContainer: false,
         foreignObjectRendering: false,
-        imageTimeout: 30000,
-        letterRendering: true
+        imageTimeout: 30000
       });
       
       // Create the final canvas with desired dimensions
@@ -200,3 +199,4 @@ export class FlyerGenerator {
     }
   }
 }
+
