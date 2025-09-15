@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Form, Alert } from './bootstrap';
+import { Card, Button, Alert } from './bootstrap';
+import Form from './bootstrap/Form';
 import { TemplateField, FONT_FAMILIES, FONT_WEIGHTS } from '../types';
 
 interface FieldEditorProps {

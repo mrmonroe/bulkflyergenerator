@@ -34,7 +34,7 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ template, show, onExp
       case 'date':
         return show?.date ? new Date(show.date).toLocaleDateString() : new Date(previewShow.date).toLocaleDateString();
       case 'time':
-        return show?.show_time || previewShow.show_time;
+        return show?.show_time || previewShow.show_time || '8:00 PM';
       case 'address':
         return show?.venue_address || previewShow.venue_address || '';
       case 'price':

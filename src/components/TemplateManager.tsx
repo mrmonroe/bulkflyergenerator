@@ -249,42 +249,36 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({ onTemplateSelect, onT
 
       {/* Field Editor Modal */}
       {showFieldEditor && selectedField && (
-        <Modal show={true} onHide={() => setShowFieldEditor(false)} size="lg">
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <i className="fas fa-edit me-2"></i>
-              Edit Field: {selectedField.label}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FieldEditor
-              field={selectedField}
-              onSave={handleFieldSave}
-              onCancel={() => setShowFieldEditor(false)}
-              onDelete={() => handleFieldDelete(selectedField.id)}
-            />
-          </Modal.Body>
+        <Modal 
+          show={true} 
+          onHide={() => setShowFieldEditor(false)} 
+          size="lg"
+          title={`Edit Field: ${selectedField.label}`}
+        >
+          <FieldEditor
+            field={selectedField}
+            onSave={handleFieldSave}
+            onCancel={() => setShowFieldEditor(false)}
+            onDelete={() => handleFieldDelete(selectedField.id)}
+          />
         </Modal>
       )}
 
       {/* Template Preview Modal */}
       {showPreview && editingTemplate && (
-        <Modal show={true} onHide={() => setShowPreview(false)} size="lg">
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <i className="fas fa-eye me-2"></i>
-              Template Preview: {editingTemplate.name}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <TemplatePreview
-              template={editingTemplate}
-              onEdit={() => {
-                setShowPreview(false);
-                handleEditTemplate(editingTemplate);
-              }}
-            />
-          </Modal.Body>
+        <Modal 
+          show={true} 
+          onHide={() => setShowPreview(false)} 
+          size="lg"
+          title={`Template Preview: ${editingTemplate.name}`}
+        >
+          <TemplatePreview
+            template={editingTemplate}
+            onEdit={() => {
+              setShowPreview(false);
+              handleEditTemplate(editingTemplate);
+            }}
+          />
         </Modal>
       )}
     </div>
@@ -357,27 +351,12 @@ const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onSave, onCan
   };
 
   const handleFieldSave = (updatedField: TemplateField) => {
-    if (editingTemplate) {
-      const updatedTemplate = {
-        ...editingTemplate,
-        fields: editingTemplate.fields.map(field =>
-          field.id === updatedField.id ? updatedField : field
-        )
-      };
-      setEditingTemplate(updatedTemplate);
-    }
-    setShowFieldEditor(false);
-    setSelectedField(null);
-  };
-
-  const handleFieldDelete = (fieldId: string) => {
-    if (editingTemplate) {
-      const updatedTemplate = {
-        ...editingTemplate,
-        fields: editingTemplate.fields.filter(field => field.id !== fieldId)
-      };
-      setEditingTemplate(updatedTemplate);
-    }
+    setEditedTemplate(prev => ({
+      ...prev,
+      fields: prev.fields.map(field =>
+        field.id === updatedField.id ? updatedField : field
+      )
+    }));
     setShowFieldEditor(false);
     setSelectedField(null);
   };
@@ -388,14 +367,12 @@ const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onSave, onCan
   };
 
   return (
-    <Modal show={true} onHide={onCancel} size="xl">
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <i className="fas fa-edit me-2"></i>
-          {template.id ? 'Edit Template' : 'Create Template'}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <Modal 
+      show={true} 
+      onHide={onCancel} 
+      size="xl"
+      title={`${template.id ? 'Edit Template' : 'Create Template'}`}
+    >
         <div className="row">
           {/* Template Settings */}
           <div className="col-md-4">
@@ -523,16 +500,16 @@ const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onSave, onCan
             </Card>
           </div>
         </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button variant="primary" onClick={() => onSave(editedTemplate)}>
-          <i className="fas fa-save me-2"></i>
-          Save Template
-        </Button>
-      </Modal.Footer>
+        
+        <div className="modal-footer">
+          <Button variant="secondary" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={() => onSave(editedTemplate)}>
+            <i className="fas fa-save me-2"></i>
+            Save Template
+          </Button>
+        </div>
     </Modal>
   );
 };
