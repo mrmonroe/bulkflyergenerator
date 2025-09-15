@@ -1,3 +1,5 @@
+/* Global styles that work with Bootstrap */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +7,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
-/* Loading styles */
+/* Override Bootstrap's default font stack for better consistency */
+html {
+  font-size: 16px;
+}
+
+/* Custom loading styles that work with Bootstrap */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -40,7 +48,146 @@ body {
   margin: 0;
 }
 
+/* Code styling */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  font-size: 0.875em;
+  color: #e83e8c;
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
 }
+
+pre code {
+  color: inherit;
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Custom focus styles for better accessibility */
+*:focus {
+  outline: 2px solid var(--bs-primary, #0d6efd);
+  outline-offset: 2px;
+}
+
+/* Custom selection styles */
+::selection {
+  background-color: var(--bs-primary, #0d6efd);
+  color: white;
+}
+
+::-moz-selection {
+  background-color: var(--bs-primary, #0d6efd);
+  color: white;
+}
+
+/* Custom print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .card {
+    border: 1px solid #dee2e6 !important;
+    box-shadow: none !important;
+  }
+  
+  .btn {
+    border: 1px solid #000 !important;
+    background: transparent !important;
+    color: #000 !important;
+  }
+}
+
+/* Custom utility classes */
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.border-radius-lg {
+  border-radius: 0.5rem !important;
+}
+
+.border-radius-xl {
+  border-radius: 1rem !important;
+}
+
+/* Custom animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom responsive text utilities */
+@media (max-width: 576px) {
+  .text-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .h1-responsive {
+    font-size: 1.75rem;
+  }
+  
+  .h2-responsive {
+    font-size: 1.5rem;
+  }
+  
+  .h3-responsive {
+    font-size: 1.25rem;
+  }
+}
+
+/* Custom spacing utilities */
+.spacing-xs { margin: 0.25rem; }
+.spacing-sm { margin: 0.5rem; }
+.spacing-md { margin: 1rem; }
+.spacing-lg { margin: 1.5rem; }
+.spacing-xl { margin: 3rem; }
+
+.p-spacing-xs { padding: 0.25rem; }
+.p-spacing-sm { padding: 0.5rem; }
+.p-spacing-md { padding: 1rem; }
+.p-spacing-lg { padding: 1.5rem; }
+.p-spacing-xl { padding: 3rem; }

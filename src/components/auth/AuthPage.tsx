@@ -6,7 +6,7 @@ const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="auth-page">
+    <div className="min-vh-100 d-flex align-items-center" style={{ backgroundColor: '#f8f9fa' }}>
       {isLogin ? (
         <LoginForm onSwitchToRegister={() => setIsLogin(false)} />
       ) : (

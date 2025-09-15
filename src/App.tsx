@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Header from './components/Header';
 import UserProfile from './components/UserProfile';
+import AuthPage from './components/auth/AuthPage';
 import { Show, FlyerData, ExportOptions } from './types';
 import { convertShowToFlyerData } from './utils/flyerUtils';
 import { loadShowsFromCSV } from './utils/csvParser';
 import { FlyerGenerator } from './services/flyerGenerator';
 import FlyerPreview from './components/FlyerPreview';
 import ExportButton from './components/ExportButton';
+import { Button, Card, Alert, Spinner } from './components/bootstrap';
 import './App.css';
 
 const MainApp: React.FC = () => {
@@ -87,71 +89,132 @@ const MainApp: React.FC = () => {
   }, []);
 
   return (
-    <div className="app">
+    <div className="min-vh-100" style={{ backgroundColor: '#f8f9fa' }}>
       <Header />
-      <div className="container">
-        <div className="main-header">
-          <h1>Show Flyer Generator</h1>
-          <p>Generate professional flyers for all your shows using your custom template</p>
+      <div className="container-fluid py-4">
+        <div className="row">
+          <div className="col-12">
+            <Card className="mb-4">
+              <div className="text-center">
+                <h1 className="display-4 mb-3">
+                  <i className="fas fa-music me-3 text-primary"></i>
+                  Show Flyer Generator
+                </h1>
+                <p className="lead text-muted">
+                  Generate professional flyers for all your shows using your custom template
+                </p>
+              </div>
+            </Card>
+          </div>
         </div>
 
-        <div className="controls">
-          <button className="btn" onClick={loadShows} disabled={loading}>
-            {loading ? 'Loading...' : 'Load Shows from CSV'}
-          </button>
-          <button 
-            className="btn btn-success" 
-            onClick={handleExportAllInstagram}
-            disabled={loading || shows.length === 0}
-          >
-            Export All Instagram (ZIP with Monthly Folders)
-          </button>
-          <button 
-            className="btn btn-success" 
-            onClick={handleExportAllFacebook}
-            disabled={loading || shows.length === 0}
-          >
-            Export All Facebook (ZIP with Monthly Folders)
-          </button>
+        <div className="row mb-4">
+          <div className="col-12">
+            <Card>
+              <div className="card-body">
+                <h5 className="card-title">
+                  <i className="fas fa-cogs me-2"></i>
+                  Controls
+                </h5>
+                <div className="d-grid d-md-flex gap-2">
+                  <Button 
+                    onClick={loadShows} 
+                    disabled={loading}
+                    variant="primary"
+                    size="lg"
+                  >
+                    <i className="fas fa-upload me-2"></i>
+                    {loading ? 'Loading...' : 'Load Shows from CSV'}
+                  </Button>
+                  <Button 
+                    onClick={handleExportAllInstagram}
+                    disabled={loading || shows.length === 0}
+                    variant="success"
+                    size="lg"
+                  >
+                    <i className="fab fa-instagram me-2"></i>
+                    Export All Instagram
+                  </Button>
+                  <Button 
+                    onClick={handleExportAllFacebook}
+                    disabled={loading || shows.length === 0}
+                    variant="info"
+                    size="lg"
+                  >
+                    <i className="fab fa-facebook me-2"></i>
+                    Export All Facebook
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
 
         {loading && (
-          <div className="loading">
-            <h3>Generating flyers...</h3>
-            <p>Please wait while we process your shows data.</p>
+          <div className="row">
+            <div className="col-12">
+              <Card>
+                <div className="card-body text-center">
+                  <Spinner size="lg" className="mb-3" />
+                  <h3>Generating flyers...</h3>
+                  <p className="text-muted">Please wait while we process your shows data.</p>
+                </div>
+              </Card>
+            </div>
           </div>
         )}
 
         {error && (
-          <div className="error">
-            <strong>Error loading shows data:</strong> {error}
-            <br /><br />
-            Make sure shows.csv is in the same directory as this HTML file.
+          <div className="row">
+            <div className="col-12">
+              <Alert variant="danger">
+                <i className="fas fa-exclamation-triangle me-2"></i>
+                <strong>Error loading shows data:</strong> {error}
+                <br />
+                Make sure shows.csv is in the same directory as this HTML file.
+              </Alert>
+            </div>
           </div>
         )}
 
-        <div className="flyers-grid">
+        <div className="row">
           {flyerElements.map((flyerData, index) => (
-            <div key={index} className="flyer-item">
-              <h3>{flyerData.venueName} - {flyerData.date}</h3>
-              <FlyerPreview data={flyerData} id={index.toString()} />
-              
-              <div className="export-buttons">
-                <ExportButton
-                  platform="instagram"
-                  onExport={(options) => handleExportFlyer(index, options)}
-                  disabled={loading}
-                >
-                  Instagram
-                </ExportButton>
-                <ExportButton
-                  platform="facebook"
-                  onExport={(options) => handleExportFlyer(index, options)}
-                  disabled={loading}
-                >
-                  Facebook
-                </ExportButton>
-              </div>
+            <div key={index} className="col-12 col-md-6 col-lg-4 mb-4">
+              <Card className="h-100">
+                <div className="card-header">
+                  <h5 className="card-title mb-0">
+                    <i className="fas fa-map-marker-alt me-2 text-primary"></i>
+                    {flyerData.venueName}
+                  </h5>
+                  <small className="text-muted">
+                    <i className="fas fa-calendar me-1"></i>
+                    {flyerData.date}
+                  </small>
+                </div>
+                <div className="card-body p-2">
+                  <FlyerPreview data={flyerData} id={index.toString()} />
+                </div>
+                <div className="card-footer">
+                  <div className="d-grid gap-2 d-md-flex">
+                    <ExportButton
+                      platform="instagram"
+                      onExport={(options) => handleExportFlyer(index, options)}
+                      disabled={loading}
+                    >
+                      <i className="fab fa-instagram me-1"></i>
+                      Instagram
+                    </ExportButton>
+                    <ExportButton
+                      platform="facebook"
+                      onExport={(options) => handleExportFlyer(index, options)}
+                      disabled={loading}
+                    >
+                      <i className="fab fa-facebook me-1"></i>
+                      Facebook
+                    </ExportButton>
+                  </div>
+                </div>
+              </Card>
             </div>
           ))}
         </div>
@@ -165,8 +228,8 @@ const App: React.FC = () => {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<div>Login Page (to be implemented)</div>} />
-          <Route path="/register" element={<div>Register Page (to be implemented)</div>} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/register" element={<AuthPage />} />
           <Route path="/" element={
             <ProtectedRoute>
               <MainApp />
@@ -174,9 +237,9 @@ const App: React.FC = () => {
           } />
           <Route path="/profile" element={
             <ProtectedRoute>
-              <div className="app">
+              <div className="min-vh-100" style={{ backgroundColor: '#f8f9fa' }}>
                 <Header />
-                <div className="container">
+                <div className="container-fluid py-4">
                   <UserProfile />
                 </div>
               </div>

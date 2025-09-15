@@ -1,142 +1,268 @@
-.app {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  color: #333;
-  margin: 0;
-  padding: 20px;
+/* Custom styles that work with Bootstrap and Bootswatch Flatly theme */
+
+/* Override Bootstrap variables for custom branding */
+:root {
+  --bs-primary: #2c3e50;
+  --bs-secondary: #95a5a6;
+  --bs-success: #27ae60;
+  --bs-info: #3498db;
+  --bs-warning: #f39c12;
+  --bs-danger: #e74c3c;
+  --bs-light: #ecf0f1;
+  --bs-dark: #2c3e50;
 }
 
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.main-header {
-  text-align: center;
-  margin-bottom: 30px;
-  color: white;
-}
-
-.main-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.main-header p {
-  font-size: 1.1rem;
-  opacity: 0.9;
-}
-
-.controls {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
+/* Custom flyer preview styles */
+.flyer-preview {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin: 10px;
 }
 
-.btn:hover:not(:disabled) {
+.flyer-preview:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+/* Custom button enhancements */
+.btn {
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
-.btn-success {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.btn-success:hover:not(:disabled) {
-  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+.btn:active {
+  transform: translateY(0);
 }
 
-.flyers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
-  margin-top: 30px;
+/* Custom card enhancements */
+.card {
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.flyer-item {
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  text-align: center;
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
-.flyer-item h3 {
-  margin-bottom: 15px;
-  color: #333;
-  border-bottom: 2px solid #667eea;
-  padding-bottom: 10px;
+/* Custom navbar enhancements */
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
 }
 
-.export-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
+.nav-link {
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
-.loading {
-  text-align: center;
-  padding: 20px;
-  color: white;
+.nav-link:hover {
+  color: var(--bs-primary) !important;
 }
 
-.error {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 15px;
+/* Custom form enhancements */
+.form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* Custom modal enhancements */
+.modal-content {
+  border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--bs-light);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--bs-light);
+}
+
+/* Custom alert enhancements */
+.alert {
+  border: none;
   border-radius: 8px;
-  margin: 20px 0;
-  border: 1px solid #f5c6cb;
+  font-weight: 500;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .app {
-    padding: 15px;
-  }
-  
-  .header h1 {
+/* Custom spinner enhancements */
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Custom dropdown enhancements */
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  border-radius: 8px;
+}
+
+.dropdown-item {
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--bs-light);
+}
+
+/* Custom tab enhancements */
+.nav-tabs .nav-link {
+  border: none;
+  border-radius: 8px 8px 0 0;
+  margin-right: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: transparent;
+  background-color: var(--bs-light);
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--bs-primary);
+  color: white;
+  border-color: var(--bs-primary);
+}
+
+/* Custom profile photo styles */
+.profile-photo-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-photo-container img {
+  border: 3px solid var(--bs-light);
+  transition: border-color 0.2s ease;
+}
+
+.profile-photo-container:hover img {
+  border-color: var(--bs-primary);
+}
+
+/* Custom social media platform icons */
+.fab.fa-instagram {
+  color: #E4405F;
+}
+
+.fab.fa-facebook {
+  color: #1877F2;
+}
+
+.fab.fa-twitter {
+  color: #1DA1F2;
+}
+
+.fab.fa-youtube {
+  color: #FF0000;
+}
+
+.fab.fa-spotify {
+  color: #1DB954;
+}
+
+.fab.fa-soundcloud {
+  color: #FF5500;
+}
+
+.fab.fa-bandcamp {
+  color: #629aa0;
+}
+
+/* Custom responsive utilities */
+@media (max-width: 576px) {
+  .display-4 {
     font-size: 2rem;
   }
   
-  .flyers-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .display-5 {
+    font-size: 1.75rem;
   }
   
-  .controls {
-    padding: 20px;
+  .lead {
+    font-size: 1rem;
   }
   
-  .btn {
-    padding: 12px 24px;
-    font-size: 14px;
-    margin: 5px;
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
   }
+}
+
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .nav-tabs .nav-link {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom focus styles for accessibility */
+.btn:focus,
+.form-control:focus,
+.form-check-input:focus {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* Custom loading states */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Custom text utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--bs-primary), var(--bs-info));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom shadow utilities */
+.shadow-soft {
+  box-shadow: 0 2px 15px rgba(0,0,0,0.08) !important;
+}
+
+.shadow-medium {
+  box-shadow: 0 4px 25px rgba(0,0,0,0.12) !important;
+}
+
+.shadow-strong {
+  box-shadow: 0 8px 40px rgba(0,0,0,0.16) !important;
 }

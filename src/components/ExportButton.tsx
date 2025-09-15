@@ -1,19 +1,23 @@
 import React from 'react';
 import { ExportOptions } from '../types';
-import './ExportButton.css';
+import { Button } from './bootstrap';
 
 interface ExportButtonProps {
   platform: 'instagram' | 'facebook' | 'custom';
   onExport: (options: ExportOptions) => void;
   disabled?: boolean;
   children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'lg';
 }
 
 const ExportButton: React.FC<ExportButtonProps> = ({ 
   platform, 
   onExport, 
   disabled = false, 
-  children 
+  children,
+  className = '',
+  size
 }) => {
   const getExportOptions = (): ExportOptions => {
     switch (platform) {
@@ -28,6 +32,19 @@ const ExportButton: React.FC<ExportButtonProps> = ({
     }
   };
 
+  const getVariant = (): 'primary' | 'info' | 'secondary' => {
+    switch (platform) {
+      case 'instagram':
+        return 'primary';
+      case 'facebook':
+        return 'info';
+      case 'custom':
+        return 'secondary';
+      default:
+        return 'primary';
+    }
+  };
+
   const handleClick = () => {
     if (!disabled) {
       onExport(getExportOptions());
@@ -35,13 +52,15 @@ const ExportButton: React.FC<ExportButtonProps> = ({
   };
 
   return (
-    <button 
-      className={`export-btn ${disabled ? 'disabled' : ''}`}
+    <Button 
+      variant={getVariant()}
       onClick={handleClick}
       disabled={disabled}
+      className={className}
+      size={size}
     >
       {children}
-    </button>
+    </Button>
   );
 };
 

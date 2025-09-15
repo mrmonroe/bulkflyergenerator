@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import './AuthForm.css';
+import { Card, FormGroup, Input, Button, Alert } from '../bootstrap';
 
 interface LoginFormProps {
   onSwitchToRegister: () => void;
@@ -28,52 +28,75 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
   };
 
   return (
-    <div className="auth-form-container">
-      <div className="auth-form">
-        <h2>Sign In</h2>
-        <p className="auth-subtitle">Welcome back! Please sign in to your account.</p>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="Enter your email"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="Enter your password"
-            />
-          </div>
-          
-          <button type="submit" disabled={loading} className="auth-button">
-            {loading ? 'Signing In...' : 'Sign In'}
-          </button>
-        </form>
-        
-        <div className="auth-switch">
-          <p>
-            Don't have an account?{' '}
-            <button type="button" onClick={onSwitchToRegister} className="switch-button">
-              Sign up here
-            </button>
-          </p>
+    <div className="container-fluid">
+      <div className="row justify-content-center">
+        <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+          <Card className="mt-5 shadow">
+            <div className="text-center mb-4">
+              <h2 className="h3 mb-2">
+                <i className="fas fa-sign-in-alt me-2 text-primary"></i>
+                Sign In
+              </h2>
+              <p className="text-muted">Welcome back! Please sign in to your account.</p>
+            </div>
+            
+            {error && (
+              <Alert variant="danger" dismissible onClose={() => setError('')}>
+                <i className="fas fa-exclamation-triangle me-2"></i>
+                {error}
+              </Alert>
+            )}
+            
+            <form onSubmit={handleSubmit}>
+              <FormGroup label="Email Address" htmlFor="email" required>
+                <Input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  placeholder="Enter your email"
+                />
+              </FormGroup>
+              
+              <FormGroup label="Password" htmlFor="password" required>
+                <Input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  placeholder="Enter your password"
+                />
+              </FormGroup>
+              
+              <div className="d-grid">
+                <Button 
+                  type="submit" 
+                  disabled={loading} 
+                  loading={loading}
+                  size="lg"
+                >
+                  {loading ? 'Signing In...' : 'Sign In'}
+                </Button>
+              </div>
+            </form>
+            
+            <div className="text-center mt-4">
+              <p className="mb-0">
+                Don't have an account?{' '}
+                <button 
+                  type="button" 
+                  onClick={onSwitchToRegister} 
+                  className="btn btn-link p-0"
+                >
+                  Sign up here
+                </button>
+              </p>
+            </div>
+          </Card>
         </div>
       </div>
     </div>
