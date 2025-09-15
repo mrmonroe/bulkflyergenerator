@@ -94,14 +94,14 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onSave, onCancel, onDe
           <div className="col-md-6">
             <h6 className="mb-3">Basic Properties</h6>
             
-            <Form.FormGroup className="mb-3">
+            <Form.FormGroup className="mb-3" error={errors.label}>
               <label htmlFor="fieldLabel">Label *</label>
               <Form.Input
                 type="text"
                 id="fieldLabel"
                 value={editedField.label}
                 onChange={(e) => handleFieldChange({ label: e.target.value })}
-                isInvalid={!!errors.label}
+                error={!!errors.label}
               />
             </Form.FormGroup>
 
@@ -117,26 +117,26 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onSave, onCancel, onDe
 
             <div className="row">
               <div className="col-6">
-                <Form.FormGroup className="mb-3">
+                <Form.FormGroup className="mb-3" error={errors.x}>
                   <label htmlFor="fieldX">X Position *</label>
                   <Form.Input
                     type="number"
                     id="fieldX"
                     value={editedField.x}
                     onChange={(e) => handleFieldChange({ x: parseInt(e.target.value) || 0 })}
-                    isInvalid={!!errors.x}
+                    error={!!errors.x}
                   />
                 </Form.FormGroup>
               </div>
               <div className="col-6">
-                <Form.FormGroup className="mb-3">
+                <Form.FormGroup className="mb-3" error={errors.y}>
                   <label htmlFor="fieldY">Y Position *</label>
                   <Form.Input
                     type="number"
                     id="fieldY"
                     value={editedField.y}
                     onChange={(e) => handleFieldChange({ y: parseInt(e.target.value) || 0 })}
-                    isInvalid={!!errors.y}
+                    error={!!errors.y}
                   />
                 </Form.FormGroup>
               </div>
@@ -144,26 +144,26 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onSave, onCancel, onDe
 
             <div className="row">
               <div className="col-6">
-                <Form.FormGroup className="mb-3">
+                <Form.FormGroup className="mb-3" error={errors.width}>
                   <label htmlFor="fieldWidth">Width *</label>
                   <Form.Input
                     type="number"
                     id="fieldWidth"
                     value={editedField.width}
                     onChange={(e) => handleFieldChange({ width: parseInt(e.target.value) || 0 })}
-                    isInvalid={!!errors.width}
+                    error={!!errors.width}
                   />
                 </Form.FormGroup>
               </div>
               <div className="col-6">
-                <Form.FormGroup className="mb-3">
+                <Form.FormGroup className="mb-3" error={errors.height}>
                   <label htmlFor="fieldHeight">Height *</label>
                   <Form.Input
                     type="number"
                     id="fieldHeight"
                     value={editedField.height}
                     onChange={(e) => handleFieldChange({ height: parseInt(e.target.value) || 0 })}
-                    isInvalid={!!errors.height}
+                    error={!!errors.height}
                   />
                 </Form.FormGroup>
               </div>
@@ -175,11 +175,12 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onSave, onCancel, onDe
                 id="fieldTextAlign"
                 value={editedField.textAlign}
                 onChange={(e) => handleFieldChange({ textAlign: e.target.value as 'left' | 'center' | 'right' })}
-              >
-                <option value="left">Left</option>
-                <option value="center">Center</option>
-                <option value="right">Right</option>
-              </Form.Select>
+                options={[
+                  { value: 'left', label: 'Left' },
+                  { value: 'center', label: 'Center' },
+                  { value: 'right', label: 'Right' }
+                ]}
+              />
             </Form.FormGroup>
           </div>
 
@@ -193,23 +194,20 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onSave, onCancel, onDe
                 id="fieldFontFamily"
                 value={editedField.fontFamily}
                 onChange={(e) => handleFieldChange({ fontFamily: e.target.value })}
-              >
-                {FONT_FAMILIES.map((font) => (
-                  <option key={font} value={font}>{font}</option>
-                ))}
-              </Form.Select>
+                options={FONT_FAMILIES.map(font => ({ value: font, label: font }))}
+              />
             </Form.FormGroup>
 
             <div className="row">
               <div className="col-6">
-                <Form.FormGroup className="mb-3">
+                <Form.FormGroup className="mb-3" error={errors.fontSize}>
                   <label htmlFor="fieldFontSize">Font Size *</label>
                   <Form.Input
                     type="number"
                     id="fieldFontSize"
                     value={editedField.fontSize}
                     onChange={(e) => handleFieldChange({ fontSize: parseInt(e.target.value) || 0 })}
-                    isInvalid={!!errors.fontSize}
+                    error={!!errors.fontSize}
                   />
                 </Form.FormGroup>
               </div>
@@ -220,11 +218,8 @@ const FieldEditor: React.FC<FieldEditorProps> = ({ field, onSave, onCancel, onDe
                     id="fieldFontWeight"
                     value={editedField.fontWeight}
                     onChange={(e) => handleFieldChange({ fontWeight: e.target.value as TemplateField['fontWeight'] })}
-                  >
-                    {FONT_WEIGHTS.map((weight) => (
-                      <option key={weight} value={weight}>{weight}</option>
-                    ))}
-                  </Form.Select>
+                    options={FONT_WEIGHTS.map(weight => ({ value: weight, label: weight }))}
+                  />
                 </Form.FormGroup>
               </div>
             </div>

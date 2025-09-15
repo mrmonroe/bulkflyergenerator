@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, Alert, Spinner, Modal } from './bootstrap';
 import FieldEditor from './FieldEditor';
 import TemplatePreview from './TemplatePreview';
-import { FlyerTemplate, TemplateField, TEMPLATE_FIELD_TYPES, FONT_FAMILIES, FONT_WEIGHTS } from '../types';
+import { FlyerTemplate, TemplateField, TEMPLATE_FIELD_TYPES } from '../types';
 
 interface TemplateManagerProps {
   onTemplateSelect?: (template: FlyerTemplate) => void;
@@ -120,6 +120,42 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({ onTemplateSelect, onT
     if (window.confirm('Are you sure you want to delete this template?')) {
       setTemplates(templates.filter(t => t.id !== templateId));
     }
+  };
+
+  const handleFieldSelect = (field: TemplateField) => {
+    setSelectedField(field);
+    setShowFieldEditor(true);
+  };
+
+  const handleFieldSave = (updatedField: TemplateField) => {
+    if (editingTemplate) {
+      const updatedTemplate = {
+        ...editingTemplate,
+        fields: editingTemplate.fields.map(field =>
+          field.id === updatedField.id ? updatedField : field
+        )
+      };
+      setEditingTemplate(updatedTemplate);
+    }
+    setShowFieldEditor(false);
+    setSelectedField(null);
+  };
+
+  const handleFieldDelete = (fieldId: string) => {
+    if (editingTemplate) {
+      const updatedTemplate = {
+        ...editingTemplate,
+        fields: editingTemplate.fields.filter(field => field.id !== fieldId)
+      };
+      setEditingTemplate(updatedTemplate);
+    }
+    setShowFieldEditor(false);
+    setSelectedField(null);
+  };
+
+  const handlePreview = (template: FlyerTemplate) => {
+    setEditingTemplate(template);
+    setShowPreview(true);
   };
 
   if (loading) {
