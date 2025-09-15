@@ -1,0 +1,110 @@
+.flyer-preview {
+  width: 300px;
+  height: 300px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background: #231F20;
+  color: #caa12b;
+  font-family: 'Oswald', Impact, 'Arial Narrow', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 15px;
+  margin: 0 auto 20px;
+}
+
+.flyer-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.logo-image {
+  width: 120px;
+  height: auto;
+  display: block;
+  margin-bottom: 15px;
+}
+
+/* Text Sizes matching flyer.html - scaled down for preview */
+.size-xxl { 
+  font-size: 30px; 
+  line-height: .95; 
+  font-weight: 900; 
+  margin: 8px 0;
+}
+
+.size-xl { 
+  font-size: 27px; 
+  line-height: .95; 
+  font-weight: 900; 
+  margin: 8px 0;
+}
+
+.size-lg { 
+  font-size: 18px; 
+  line-height: 1.02; 
+  font-weight: 900; 
+  margin: 6px 0;
+}
+
+.size-md { 
+  font-size: 15px;  
+  line-height: 1.05; 
+  font-weight: 900; 
+  margin: 6px 0;
+}
+
+/* Text Colors */
+.white_text {
+  color: #f2f2f2;
+}
+
+.gold_text {
+  color: #caa12b;
+}
+
+/* Section styling */
+section {
+  text-align: center;
+  margin: 5px 0;
+}
+
+/* Large preview for individual generator */
+.flyer-preview.large {
+  width: 400px;
+  height: 400px;
+  padding: 20px;
+}
+
+.flyer-preview.large .logo-image {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.flyer-preview.large .size-xxl { 
+  font-size: 50px; 
+  margin: 10px 0;
+}
+
+.flyer-preview.large .size-xl { 
+  font-size: 45px; 
+  margin: 10px 0;
+}
+
+.flyer-preview.large .size-lg { 
+  font-size: 30px; 
+  margin: 8px 0;
+}
+
+.flyer-preview.large .size-md { 
+  font-size: 25px;  
+  margin: 8px 0;
+}
