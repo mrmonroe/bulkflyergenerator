@@ -73,6 +73,19 @@ export const initializeDatabase = async (): Promise<void> => {
       )
     `);
 
+    // Add new columns if they don't exist (for existing tables)
+    try {
+      await client.query(`
+        ALTER TABLE shows 
+        ADD COLUMN IF NOT EXISTS latitude DECIMAL(10, 8),
+        ADD COLUMN IF NOT EXISTS longitude DECIMAL(11, 8),
+        ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT false
+      `);
+    } catch (error) {
+      // Ignore errors if columns already exist
+      console.log('Columns may already exist, continuing...');
+    }
+
     // Create user_profiles table
     await client.query(`
       CREATE TABLE IF NOT EXISTS user_profiles (
@@ -128,6 +141,8 @@ export const initializeDatabase = async (): Promise<void> => {
       CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id ON refresh_tokens(user_id);
       CREATE INDEX IF NOT EXISTS idx_refresh_tokens_token ON refresh_tokens(token);
       CREATE INDEX IF NOT EXISTS idx_shows_user_id ON shows(user_id);
+      CREATE INDEX IF NOT EXISTS idx_shows_public ON shows(is_public) WHERE is_public = true;
+      CREATE INDEX IF NOT EXISTS idx_shows_date ON shows(date);
       CREATE INDEX IF NOT EXISTS idx_user_profiles_user_id ON user_profiles(user_id);
       CREATE INDEX IF NOT EXISTS idx_user_instruments_user_id ON user_instruments(user_id);
       CREATE INDEX IF NOT EXISTS idx_user_genres_user_id ON user_genres(user_id);

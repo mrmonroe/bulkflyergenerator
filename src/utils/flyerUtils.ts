@@ -1,4 +1,4 @@
-import { Show, FlyerData } from '../types';
+import { Show, LegacyShow, FlyerData } from '../types';
 
 export const formatDate = (dateString: string): string => {
   if (!dateString) return 'TBD';
@@ -33,7 +33,22 @@ export const parseVenueAddress = (address: string): { address: string; cityState
   return { address: cleanAddress, cityState: '' };
 };
 
+// Convert new Show interface to FlyerData
 export const convertShowToFlyerData = (show: Show): FlyerData => {
+  const { address, cityState } = parseVenueAddress(show.venue_address || '');
+  
+  return {
+    date: formatDate(show.date || ''),
+    venueName: show.venue_name || 'Venue TBD',
+    venueAddress: address,
+    cityState: cityState || show.city_state || '',
+    showTime: formatTime(show.show_time || ''),
+    eventType: show.event_type || 'Live Acoustic Music'
+  };
+};
+
+// Convert legacy Show interface to FlyerData
+export const convertLegacyShowToFlyerData = (show: LegacyShow): FlyerData => {
   const { address, cityState } = parseVenueAddress(show['Venue Address'] || '');
   
   return {

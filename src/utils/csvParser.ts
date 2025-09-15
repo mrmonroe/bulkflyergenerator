@@ -1,7 +1,7 @@
 import Papa from 'papaparse';
-import { Show } from '../types';
+import { LegacyShow } from '../types';
 
-export const parseCSV = (csvText: string): Show[] => {
+export const parseCSV = (csvText: string): LegacyShow[] => {
   const result = Papa.parse(csvText, {
     header: true,
     skipEmptyLines: true,
@@ -9,10 +9,10 @@ export const parseCSV = (csvText: string): Show[] => {
     transform: (value) => value.trim()
   });
 
-  return result.data as Show[];
+  return result.data as LegacyShow[];
 };
 
-export const loadShowsFromCSV = async (): Promise<Show[]> => {
+export const loadShowsFromCSV = async (): Promise<LegacyShow[]> => {
   try {
     const response = await fetch('/shows.csv');
     const csvText = await response.text();

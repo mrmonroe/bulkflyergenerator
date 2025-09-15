@@ -48,6 +48,9 @@ export interface Show {
   city_state?: string;
   show_time?: string;
   event_type?: string;
+  latitude?: number;
+  longitude?: number;
+  is_public?: boolean;
   created_at: Date;
   updated_at: Date;
 }
@@ -59,6 +62,9 @@ export interface ShowCreate {
   city_state?: string;
   show_time?: string;
   event_type?: string;
+  latitude?: number;
+  longitude?: number;
+  is_public?: boolean;
 }
 
 export interface JwtPayload {

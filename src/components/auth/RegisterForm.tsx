@@ -130,7 +130,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
                 label="Password" 
                 htmlFor="password" 
                 required
-                helperText="Must be at least 8 characters with uppercase, lowercase, and number"
               >
                 <Input
                   type="password"
@@ -141,6 +140,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
                   required
                   disabled={loading}
                   placeholder="Create a strong password"
+                  helperText="Must be at least 8 characters with uppercase, lowercase, and number"
                 />
               </FormGroup>
               

@@ -128,4 +128,5 @@ export const Select: React.FC<SelectProps> = ({
   );
 };
 
-export default { FormGroup, Input, Textarea, Select };
+const Form = { FormGroup, Input, Textarea, Select };
+export default Form;

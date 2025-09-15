@@ -6,6 +6,52 @@ import { Show, ShowCreate } from '../types';
 
 const router = express.Router();
 
+// Get all public shows (no authentication required)
+router.get('/public', async (req, res) => {
+  try {
+    const { lat, lng, radius = 50 } = req.query; // radius in miles, default 50
+    const client = await pool.connect();
+    
+    try {
+      let query = `
+        SELECT s.*, u.first_name, u.last_name, up.bio, up.profile_photo_url
+        FROM shows s
+        JOIN users u ON s.user_id = u.id
+        LEFT JOIN user_profiles up ON s.user_id = up.user_id
+        WHERE s.is_public = true
+      `;
+      
+      const queryParams: any[] = [];
+      let paramCount = 0;
+      
+      // If location is provided, add distance calculation
+      if (lat && lng) {
+        paramCount++;
+        query += ` AND s.latitude IS NOT NULL AND s.longitude IS NOT NULL
+          AND (
+            3959 * acos(
+              cos(radians($${paramCount})) * cos(radians(s.latitude)) * 
+              cos(radians(s.longitude) - radians($${paramCount + 1})) + 
+              sin(radians($${paramCount})) * sin(radians(s.latitude))
+            )
+          ) <= $${paramCount + 2}`;
+        queryParams.push(parseFloat(lat as string), parseFloat(lng as string), parseFloat(radius as string));
+      }
+      
+      query += ` ORDER BY s.date ASC, s.show_time ASC`;
+      
+      const result = await client.query(query, queryParams);
+      
+      res.json({ shows: result.rows });
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching public shows:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Get all shows for the authenticated user
 router.get('/', authenticateToken, async (req, res) => {
   try {
@@ -61,7 +107,7 @@ router.post('/', authenticateToken, validateShow, async (req: any, res: any) => 
     
     try {
       const result = await client.query(
-        'INSERT INTO shows (user_id, date, venue_name, venue_address, city_state, show_time, event_type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+        'INSERT INTO shows (user_id, date, venue_name, venue_address, city_state, show_time, event_type, latitude, longitude, is_public) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
         [
           req.user!.id,
           showData.date,
@@ -69,7 +115,10 @@ router.post('/', authenticateToken, validateShow, async (req: any, res: any) => 
           showData.venue_address,
           showData.city_state,
           showData.show_time,
-          showData.event_type
+          showData.event_type,
+          showData.latitude,
+          showData.longitude,
+          showData.is_public || false
         ]
       );
 
@@ -92,7 +141,7 @@ router.put('/:id', authenticateToken, validateShow, async (req: any, res: any) =
     
     try {
       const result = await client.query(
-        'UPDATE shows SET date = $1, venue_name = $2, venue_address = $3, city_state = $4, show_time = $5, event_type = $6, updated_at = CURRENT_TIMESTAMP WHERE id = $7 AND user_id = $8 RETURNING *',
+        'UPDATE shows SET date = $1, venue_name = $2, venue_address = $3, city_state = $4, show_time = $5, event_type = $6, latitude = $7, longitude = $8, is_public = $9, updated_at = CURRENT_TIMESTAMP WHERE id = $10 AND user_id = $11 RETURNING *',
         [
           showData.date,
           showData.venue_name,
@@ -100,6 +149,9 @@ router.put('/:id', authenticateToken, validateShow, async (req: any, res: any) =
           showData.city_state,
           showData.show_time,
           showData.event_type,
+          showData.latitude,
+          showData.longitude,
+          showData.is_public || false,
           id,
           req.user!.id
         ]
@@ -164,7 +216,7 @@ router.post('/bulk', authenticateToken, async (req, res) => {
       const createdShows = [];
       for (const showData of shows) {
         const result = await client.query(
-          'INSERT INTO shows (user_id, date, venue_name, venue_address, city_state, show_time, event_type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+          'INSERT INTO shows (user_id, date, venue_name, venue_address, city_state, show_time, event_type, latitude, longitude, is_public) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
           [
             req.user!.id,
             showData.date,
@@ -172,7 +224,10 @@ router.post('/bulk', authenticateToken, async (req, res) => {
             showData.venue_address,
             showData.city_state,
             showData.show_time,
-            showData.event_type
+            showData.event_type,
+            showData.latitude,
+            showData.longitude,
+            showData.is_public || false
           ]
         );
         createdShows.push(result.rows[0]);

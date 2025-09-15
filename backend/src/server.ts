@@ -23,24 +23,28 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// Rate limiting
+// Rate limiting - disabled in development
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: isDevelopment ? 10000 : 100, // Much higher limit in development
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => isDevelopment, // Skip rate limiting in development
 });
 
 app.use(limiter);
 
-// Stricter rate limiting for auth routes
+// Stricter rate limiting for auth routes - disabled in development
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 requests per windowMs
+  max: isDevelopment ? 10000 : 5, // Much higher limit in development
   message: 'Too many authentication attempts, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => isDevelopment, // Skip rate limiting in development
 });
 
 // CORS configuration

@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import JSZip from 'jszip';
-import { FlyerData, ExportOptions, Show } from '../types';
-import { convertShowToFlyerData, getMonthFromDate } from '../utils/flyerUtils';
+import { FlyerData, ExportOptions, Show, LegacyShow } from '../types';
+import { convertShowToFlyerData, convertLegacyShowToFlyerData, getMonthFromDate } from '../utils/flyerUtils';
 
 export class FlyerGenerator {
   private static async createFlyerCanvas(
@@ -147,8 +147,17 @@ export class FlyerGenerator {
     }
   }
 
+  // Overloaded methods for different show types
   static async exportAllFlyers(
     shows: Show[], 
+    platform: 'instagram' | 'facebook'
+  ): Promise<void>;
+  static async exportAllFlyers(
+    shows: LegacyShow[], 
+    platform: 'instagram' | 'facebook'
+  ): Promise<void>;
+  static async exportAllFlyers(
+    shows: Show[] | LegacyShow[], 
     platform: 'instagram' | 'facebook'
   ): Promise<void> {
     try {
@@ -159,17 +168,25 @@ export class FlyerGenerator {
       const height = platform === 'instagram' ? 1080 : 630;
       
       for (const show of shows) {
-        if (!show.Date || processedShows.has(show.Date + show['Venue Name'])) {
+        // Check if it's a LegacyShow or Show
+        const isLegacyShow = 'Date' in show && 'Venue Name' in show;
+        
+        const date = isLegacyShow ? (show as LegacyShow).Date : (show as Show).date;
+        const venueName = isLegacyShow ? (show as LegacyShow)['Venue Name'] : (show as Show).venue_name;
+        
+        if (!date || processedShows.has(date + venueName)) {
           continue;
         }
-        processedShows.add(show.Date + show['Venue Name']);
+        processedShows.add(date + venueName);
         
         // Determine month from date
-        const month = getMonthFromDate(show.Date);
+        const month = getMonthFromDate(date);
         const monthFolder = month || 'Unknown Month';
         
         // Convert show to flyer data
-        const flyerData = convertShowToFlyerData(show);
+        const flyerData = isLegacyShow 
+          ? convertLegacyShowToFlyerData(show as LegacyShow)
+          : convertShowToFlyerData(show as Show);
         
         // Create flyer image
         const canvas = await this.createFlyerCanvas(flyerData, width, height);
@@ -182,7 +199,7 @@ export class FlyerGenerator {
         });
         
         // Add to zip with month organization
-        const fileName = `flyer-${(show['Venue Name'] || 'venue').replace(/[^a-zA-Z0-9]/g, '-')}-${(show.Date || 'date').replace(/[^a-zA-Z0-9]/g, '-')}-${platform}.png`;
+        const fileName = `flyer-${(venueName || 'venue').replace(/[^a-zA-Z0-9]/g, '-')}-${(date || 'date').replace(/[^a-zA-Z0-9]/g, '-')}-${platform}.png`;
         zip.file(`${monthFolder}/${fileName}`, blob);
       }
       

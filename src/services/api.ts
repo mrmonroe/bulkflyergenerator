@@ -2,6 +2,10 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
+// Debug logging
+console.log('API_BASE_URL:', API_BASE_URL);
+console.log('REACT_APP_API_URL env var:', process.env.REACT_APP_API_URL);
+
 // Create axios instance
 const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -108,10 +112,15 @@ export interface ShowCreate {
 // Auth API
 export const authAPI = {
   login: async (email: string, password: string): Promise<AuthResponse> => {
+    console.log('Attempting login with:', { email, password: '***' });
+    console.log('API base URL:', api.defaults.baseURL);
+    
     const response: AxiosResponse<AuthResponse> = await api.post('/auth/login', {
       email,
       password,
     });
+    
+    console.log('Login response:', response.data);
     return response.data;
   },
 

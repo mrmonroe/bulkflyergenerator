@@ -1,4 +1,33 @@
 export interface Show {
+  id: number;
+  user_id: number;
+  date: string;
+  venue_name: string;
+  venue_address?: string;
+  city_state?: string;
+  show_time?: string;
+  event_type?: string;
+  latitude?: number;
+  longitude?: number;
+  is_public?: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ShowCreate {
+  date: string;
+  venue_name: string;
+  venue_address?: string;
+  city_state?: string;
+  show_time?: string;
+  event_type?: string;
+  latitude?: number;
+  longitude?: number;
+  is_public?: boolean;
+}
+
+// Legacy Show interface for CSV parsing
+export interface LegacyShow {
   Date: string;
   'Venue Name': string;
   'Venue Address': string;
