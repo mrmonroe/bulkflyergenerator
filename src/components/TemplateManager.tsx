@@ -397,11 +397,6 @@ const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onSave, onCan
     setSelectedField(null);
   };
 
-  const handlePreview = (template: FlyerTemplate) => {
-    setEditingTemplate(template);
-    setShowPreview(true);
-  };
-
   return (
     <Modal 
       show={true} 
