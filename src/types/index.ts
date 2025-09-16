@@ -229,7 +229,7 @@ export const TEMPLATE_FIELD_TYPES: TemplateFieldConfig[] = [
     defaultHeight: 40,
     defaultFontSize: 24,
     defaultFontWeight: 'bold',
-    defaultFontFamily: 'Arial, sans-serif',
+    defaultFontFamily: 'Roboto, Arial, sans-serif',
     defaultColor: '#ffffff',
     maxLength: 50
   },
@@ -240,7 +240,7 @@ export const TEMPLATE_FIELD_TYPES: TemplateFieldConfig[] = [
     defaultHeight: 30,
     defaultFontSize: 18,
     defaultFontWeight: 'normal',
-    defaultFontFamily: 'Arial, sans-serif',
+    defaultFontFamily: 'Roboto, Arial, sans-serif',
     defaultColor: '#ffffff',
     maxLength: 20
   },
@@ -251,7 +251,7 @@ export const TEMPLATE_FIELD_TYPES: TemplateFieldConfig[] = [
     defaultHeight: 30,
     defaultFontSize: 18,
     defaultFontWeight: 'normal',
-    defaultFontFamily: 'Arial, sans-serif',
+    defaultFontFamily: 'Roboto, Arial, sans-serif',
     defaultColor: '#ffffff',
     maxLength: 10
   },
@@ -262,7 +262,7 @@ export const TEMPLATE_FIELD_TYPES: TemplateFieldConfig[] = [
     defaultHeight: 60,
     defaultFontSize: 14,
     defaultFontWeight: 'normal',
-    defaultFontFamily: 'Arial, sans-serif',
+    defaultFontFamily: 'Roboto, Arial, sans-serif',
     defaultColor: '#ffffff',
     maxLength: 100
   },
@@ -273,7 +273,7 @@ export const TEMPLATE_FIELD_TYPES: TemplateFieldConfig[] = [
     defaultHeight: 30,
     defaultFontSize: 16,
     defaultFontWeight: 'bold',
-    defaultFontFamily: 'Arial, sans-serif',
+    defaultFontFamily: 'Roboto, Arial, sans-serif',
     defaultColor: '#ffffff',
     maxLength: 20
   },
@@ -284,7 +284,7 @@ export const TEMPLATE_FIELD_TYPES: TemplateFieldConfig[] = [
     defaultHeight: 80,
     defaultFontSize: 14,
     defaultFontWeight: 'normal',
-    defaultFontFamily: 'Arial, sans-serif',
+    defaultFontFamily: 'Roboto, Arial, sans-serif',
     defaultColor: '#ffffff',
     maxLength: 200
   },
@@ -295,7 +295,7 @@ export const TEMPLATE_FIELD_TYPES: TemplateFieldConfig[] = [
     defaultHeight: 30,
     defaultFontSize: 16,
     defaultFontWeight: 'normal',
-    defaultFontFamily: 'Arial, sans-serif',
+    defaultFontFamily: 'Roboto, Arial, sans-serif',
     defaultColor: '#ffffff',
     maxLength: 50
   }
