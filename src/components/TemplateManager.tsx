@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, Button, Alert, Spinner, Modal } from './bootstrap';
-import FieldEditor from './FieldEditor';
 import TemplatePreview from './TemplatePreview';
-import { FlyerTemplate, TemplateField, TEMPLATE_FIELD_TYPES } from '../types';
+import { FlyerTemplate } from '../types';
 
 interface TemplateManagerProps {
   onTemplateSelect?: (template: FlyerTemplate) => void;
@@ -10,14 +10,12 @@ interface TemplateManagerProps {
 }
 
 const TemplateManager: React.FC<TemplateManagerProps> = ({ onTemplateSelect, onTemplateSave }) => {
+  const navigate = useNavigate();
   const [templates, setTemplates] = useState<FlyerTemplate[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingTemplate, setEditingTemplate] = useState<FlyerTemplate | null>(null);
-  const [selectedField, setSelectedField] = useState<TemplateField | null>(null);
-  const [showFieldEditor, setShowFieldEditor] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<FlyerTemplate | null>(null);
 
   // Load templates on component mount
   useEffect(() => {
@@ -82,39 +80,13 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({ onTemplateSelect, onT
   };
 
   const handleCreateTemplate = () => {
-    const newTemplate: FlyerTemplate = {
-      id: Date.now().toString(),
-      name: 'New Template',
-      description: '',
-      userId: 1, // TODO: Get from auth context
-      width: 800,
-      height: 600,
-      fields: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    setEditingTemplate(newTemplate);
-    setShowCreateModal(true);
+    navigate('/templates/new');
   };
 
   const handleEditTemplate = (template: FlyerTemplate) => {
-    setEditingTemplate(template);
-    setShowCreateModal(true);
+    navigate(`/templates/${template.id}/edit`);
   };
 
-  const handleSaveTemplate = (template: FlyerTemplate) => {
-    if (editingTemplate) {
-      const updatedTemplates = templates.map(t => 
-        t.id === template.id ? template : t
-      );
-      setTemplates(updatedTemplates);
-    } else {
-      setTemplates([...templates, template]);
-    }
-    setShowCreateModal(false);
-    setEditingTemplate(null);
-    onTemplateSave?.(template);
-  };
 
   const handleDeleteTemplate = (templateId: string) => {
     if (window.confirm('Are you sure you want to delete this template?')) {
@@ -122,39 +94,8 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({ onTemplateSelect, onT
     }
   };
 
-  const handleFieldSelect = (field: TemplateField) => {
-    setSelectedField(field);
-    setShowFieldEditor(true);
-  };
-
-  const handleFieldSave = (updatedField: TemplateField) => {
-    if (editingTemplate) {
-      const updatedTemplate = {
-        ...editingTemplate,
-        fields: editingTemplate.fields.map(field =>
-          field.id === updatedField.id ? updatedField : field
-        )
-      };
-      setEditingTemplate(updatedTemplate);
-    }
-    setShowFieldEditor(false);
-    setSelectedField(null);
-  };
-
-  const handleFieldDelete = (fieldId: string) => {
-    if (editingTemplate) {
-      const updatedTemplate = {
-        ...editingTemplate,
-        fields: editingTemplate.fields.filter(field => field.id !== fieldId)
-      };
-      setEditingTemplate(updatedTemplate);
-    }
-    setShowFieldEditor(false);
-    setSelectedField(null);
-  };
-
   const handlePreview = (template: FlyerTemplate) => {
-    setEditingTemplate(template);
+    setPreviewTemplate(template);
     setShowPreview(true);
   };
 
@@ -270,49 +211,19 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({ onTemplateSelect, onT
         </Card>
       </div>
 
-      {/* Template Editor Modal */}
-      {showCreateModal && editingTemplate && (
-        <TemplateEditor
-          template={editingTemplate}
-          onSave={handleSaveTemplate}
-          onCancel={() => {
-            setShowCreateModal(false);
-            setEditingTemplate(null);
-          }}
-          onFieldSelect={handleFieldSelect}
-        />
-      )}
-
-      {/* Field Editor Modal */}
-      {showFieldEditor && selectedField && (
-        <Modal 
-          show={true} 
-          onHide={() => setShowFieldEditor(false)} 
-          size="lg"
-          title={`Edit Field: ${selectedField.label}`}
-        >
-          <FieldEditor
-            field={selectedField}
-            onSave={handleFieldSave}
-            onCancel={() => setShowFieldEditor(false)}
-            onDelete={() => handleFieldDelete(selectedField.id)}
-          />
-        </Modal>
-      )}
-
       {/* Template Preview Modal */}
-      {showPreview && editingTemplate && (
+      {showPreview && previewTemplate && (
         <Modal 
           show={true} 
           onHide={() => setShowPreview(false)} 
           size="lg"
-          title={`Template Preview: ${editingTemplate.name}`}
+          title={`Template Preview: ${previewTemplate.name}`}
         >
           <TemplatePreview
-            template={editingTemplate}
+            template={previewTemplate}
             onEdit={() => {
               setShowPreview(false);
-              handleEditTemplate(editingTemplate);
+              handleEditTemplate(previewTemplate);
             }}
           />
         </Modal>
@@ -321,228 +232,5 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({ onTemplateSelect, onT
   );
 };
 
-// Template Editor Component
-interface TemplateEditorProps {
-  template: FlyerTemplate;
-  onSave: (template: FlyerTemplate) => void;
-  onCancel: () => void;
-  onFieldSelect: (field: TemplateField) => void;
-}
-
-const TemplateEditor: React.FC<TemplateEditorProps> = ({ template, onSave, onCancel, onFieldSelect }) => {
-  const [editedTemplate, setEditedTemplate] = useState<FlyerTemplate>(template);
-  const [selectedField, setSelectedField] = useState<TemplateField | null>(null);
-  const [showFieldEditor, setShowFieldEditor] = useState(false);
-
-  const handleTemplateChange = (updates: Partial<FlyerTemplate>) => {
-    setEditedTemplate(prev => ({ ...prev, ...updates }));
-  };
-
-  const handleAddField = (fieldType: TemplateField['type']) => {
-    const fieldConfig = TEMPLATE_FIELD_TYPES.find(f => f.type === fieldType);
-    if (!fieldConfig) return;
-
-    const newField: TemplateField = {
-      id: Date.now().toString(),
-      type: fieldType,
-      label: fieldConfig.label,
-      x: 50,
-      y: 50,
-      width: fieldConfig.defaultWidth,
-      height: fieldConfig.defaultHeight,
-      fontSize: fieldConfig.defaultFontSize,
-      fontWeight: fieldConfig.defaultFontWeight,
-      fontFamily: fieldConfig.defaultFontFamily,
-      color: fieldConfig.defaultColor,
-      textAlign: 'left',
-      placeholder: fieldConfig.placeholder,
-      maxLength: fieldConfig.maxLength,
-      isRequired: true
-    };
-
-    setEditedTemplate(prev => ({
-      ...prev,
-      fields: [...prev.fields, newField]
-    }));
-  };
-
-  const handleFieldChange = (fieldId: string, updates: Partial<TemplateField>) => {
-    setEditedTemplate(prev => ({
-      ...prev,
-      fields: prev.fields.map(field =>
-        field.id === fieldId ? { ...field, ...updates } : field
-      )
-    }));
-  };
-
-  const handleFieldDelete = (fieldId: string) => {
-    setEditedTemplate(prev => ({
-      ...prev,
-      fields: prev.fields.filter(field => field.id !== fieldId)
-    }));
-  };
-
-  const handleFieldSelect = (field: TemplateField) => {
-    onFieldSelect(field);
-  };
-
-  const handleFieldSave = (updatedField: TemplateField) => {
-    setEditedTemplate(prev => ({
-      ...prev,
-      fields: prev.fields.map(field =>
-        field.id === updatedField.id ? updatedField : field
-      )
-    }));
-    setShowFieldEditor(false);
-    setSelectedField(null);
-  };
-
-  return (
-    <Modal 
-      show={true} 
-      onHide={onCancel} 
-      size="xl"
-      title={`${template.id ? 'Edit Template' : 'Create Template'}`}
-    >
-        <div className="row">
-          {/* Template Settings */}
-          <div className="col-md-4">
-            <Card>
-              <div className="card-header">
-                <h6 className="card-title mb-0">Template Settings</h6>
-              </div>
-              <div className="card-body">
-                <div className="mb-3">
-                  <label className="form-label">Template Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={editedTemplate.name}
-                    onChange={(e) => handleTemplateChange({ name: e.target.value })}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Description</label>
-                  <textarea
-                    className="form-control"
-                    rows={3}
-                    value={editedTemplate.description || ''}
-                    onChange={(e) => handleTemplateChange({ description: e.target.value })}
-                  />
-                </div>
-                <div className="row">
-                  <div className="col-6">
-                    <label className="form-label">Width (px)</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      value={editedTemplate.width}
-                      onChange={(e) => handleTemplateChange({ width: parseInt(e.target.value) || 800 })}
-                    />
-                  </div>
-                  <div className="col-6">
-                    <label className="form-label">Height (px)</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      value={editedTemplate.height}
-                      onChange={(e) => handleTemplateChange({ height: parseInt(e.target.value) || 600 })}
-                    />
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            {/* Add Field Buttons */}
-            <Card className="mt-3">
-              <div className="card-header">
-                <h6 className="card-title mb-0">Add Fields</h6>
-              </div>
-              <div className="card-body">
-                <div className="d-grid gap-2">
-                  {TEMPLATE_FIELD_TYPES.map((fieldType) => (
-                    <Button
-                      key={fieldType.type}
-                      variant="outline-primary"
-                      size="sm"
-                      onClick={() => handleAddField(fieldType.type)}
-                    >
-                      <i className="fas fa-plus me-1"></i>
-                      {fieldType.label}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            </Card>
-          </div>
-
-          {/* Template Preview */}
-          <div className="col-md-8">
-            <Card>
-              <div className="card-header">
-                <h6 className="card-title mb-0">Template Preview</h6>
-              </div>
-              <div className="card-body">
-                <div
-                  className="border position-relative"
-                  style={{
-                    width: Math.min(editedTemplate.width, 400),
-                    height: Math.min(editedTemplate.height, 300),
-                    backgroundColor: '#f8f9fa',
-                    margin: '0 auto'
-                  }}
-                >
-                  {editedTemplate.fields.map((field) => (
-                    <div
-                      key={field.id}
-                      className="position-absolute border border-primary"
-                      style={{
-                        left: field.x,
-                        top: field.y,
-                        width: field.width,
-                        height: field.height,
-                        fontSize: field.fontSize,
-                        fontWeight: field.fontWeight,
-                        fontFamily: field.fontFamily,
-                        color: field.color,
-                        textAlign: field.textAlign,
-                        backgroundColor: field.backgroundColor || 'transparent',
-                        borderColor: field.borderColor || '#007bff',
-                        borderWidth: field.borderWidth || 1,
-                        borderRadius: field.borderRadius || 0,
-                        padding: field.padding || 5,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: field.textAlign === 'center' ? 'center' : field.textAlign === 'right' ? 'flex-end' : 'flex-start'
-                      }}
-                      onClick={() => handleFieldSelect(field)}
-                    >
-                      {field.placeholder || field.label}
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 text-center">
-                  <small className="text-muted">
-                    Click on fields to edit them
-                  </small>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-        
-        <div className="modal-footer">
-          <Button variant="secondary" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={() => onSave(editedTemplate)}>
-            <i className="fas fa-save me-2"></i>
-            Save Template
-          </Button>
-        </div>
-    </Modal>
-  );
-};
 
 export default TemplateManager;

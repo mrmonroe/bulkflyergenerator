@@ -175,13 +175,31 @@ export interface TemplateField {
   isRequired?: boolean;
 }
 
+export interface BackgroundImage {
+  url: string; // Base64 or URL
+  file?: File;
+  x: number; // Position X
+  y: number; // Position Y
+  width: number; // Display width
+  height: number; // Display height
+  scale: number; // Scale factor (1.0 = original size)
+  rotation: number; // Rotation in degrees
+  cropX: number; // Crop offset X
+  cropY: number; // Crop offset Y
+  cropWidth: number; // Crop width
+  cropHeight: number; // Crop height
+  opacity: number; // Opacity 0-1
+  blendMode: 'normal' | 'multiply' | 'overlay' | 'screen' | 'soft-light' | 'hard-light';
+}
+
 export interface FlyerTemplate {
   id: string;
   name: string;
   description?: string;
   userId: number;
-  backgroundImage?: string; // Base64 or URL
-  backgroundImageFile?: File;
+  backgroundImage?: string; // Base64 or URL (legacy)
+  backgroundImageFile?: File; // Legacy
+  background?: BackgroundImage; // New background system
   width: number; // Template width in pixels
   height: number; // Template height in pixels
   fields: TemplateField[];

@@ -7,6 +7,8 @@ import UserProfile from './components/UserProfile';
 import MyShows from './components/MyShows';
 import PublicShows from './components/PublicShows';
 import TemplateManager from './components/TemplateManager';
+import TemplateEditPage from './components/TemplateEditPage';
+import TemplateCreatePage from './components/TemplateCreatePage';
 import AuthPage from './components/auth/AuthPage';
 import { Card, Button } from './components/bootstrap';
 import './App.css';
@@ -138,6 +140,12 @@ const App: React.FC = () => {
                   <TemplateManager />
                 </div>
               </div>
+            </ProtectedRoute>
+          } />
+          <Route path="/templates/new" element={<TemplateCreatePage />} />
+          <Route path="/templates/:id/edit" element={
+            <ProtectedRoute>
+              <TemplateEditPage />
             </ProtectedRoute>
           } />
           <Route path="/profile" element={
